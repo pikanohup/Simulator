@@ -1,11 +1,10 @@
-//  3 dimension hypercube nodes. 
-//  20/3/2009, Luo Wei.
+// hypercube node
 
 #ifndef HypercubeNode_H
 #define HypercubeNode_H
-#include<iostream>
-#include<string>
-#include<assert.h>
+#include <iostream>
+#include <string>
+#include <assert.h>
 #define R1  1
 #define R2  2
 using namespace std;
@@ -18,8 +17,8 @@ public:
 	bool linkused;   // in a physical circle ,check whether physical link is used , only one flit is allowed to pass the link in a circle
 	int r1;
 	int r2;
-	void	bufferMin (int chn , int n)	;	
-	void	bufferPlus (int chn ,int n);
+	void	bufferMin (int chn, int n);
+	void	bufferPlus (int chn,int n);
 
 	int c; // flow control buffer
 	int s; // flow control special buffer
@@ -33,13 +32,13 @@ public:
 	this class define the info of a flit in the hypercube node
 	including nodeid, buffer
 	************************************************/
-class NodeInfo{  
-public:				//nextnode is the node to be routed,and vchannel is the virtual channel(R1 or R2) used. 
-	int node;   	
+class NodeInfo{
+public:				//nextnode is the node to be routed,and vchannel is the virtual channel(R1 or R2) used.
+	int node;
 	int channel;  // which is used : R1 or R2
 	Buffer* buff;// point to the buffer occupy ,such as bufferxneg......
 	NodeInfo():node(-1){
-		
+
 	}
 };
 
@@ -50,7 +49,7 @@ class HypercubeNode{
 
 private:
 	int nodeid;
-	
+
 public:
 	Buffer* bufferxneg;//the buffer  of x axis negative direction
 	Buffer* bufferxpos;//the buffer  of x axis positive direction
@@ -63,14 +62,14 @@ public:
 	int linkypos;
 
 	Hypercube* hypercube;
-	
+
 	Buffer* bufferxneglink;
 	Buffer* bufferxposlink;//the buffer x positive direction link to, it is the buffer of neighbor node
 	Buffer* bufferyneglink; // ...
 	Buffer* bufferyposlink;
 
 
-	
+
 
 	int x; //x coordinate
 	int y;// y coordinate
@@ -80,15 +79,15 @@ public:
 void	setCoordinate(int _nodeid ,int _x, int _y);
 
 void	setbuffer( int buff1, int buff2);            //   num is the share buffer number
-	
+
 void	setLinkBuffer(int x1, int x2, int y1, int y2);
 
-void    sethypercube(Hypercube * hypercube);	
+void    sethypercube(Hypercube * hypercube);
 
 void	bufferPlus(Buffer* buff, int chn , int n);
-	 
+
 void	bufferMin(Buffer* buff, int chn,int n);
-	  
+
 void	clearBuffer();
 
 
@@ -97,7 +96,7 @@ void	clearBuffer();
 		delete  bufferyneg;
 		delete  bufferxpos;
 		delete  bufferypos;
-	
+
 	}
 
 };

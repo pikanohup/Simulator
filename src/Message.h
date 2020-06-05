@@ -1,4 +1,4 @@
-/*********     
+/*********
 		9/11/2007,Luo Wei.
 		The definition of message.
 
@@ -11,34 +11,34 @@
 #define  MESS_AGE
 #define PROCESSTIME 16
 #define TIMEOUT   50000
-#include<iostream>
-#include<string>
-#include<assert.h>
-#include"HypercubeNode.h"
+#include <iostream>
+#include <string>
+#include <assert.h>
+#include "HypercubeNode.h"
 using namespace std;
 class Buffer;
 class NodeInfo;
 
 
 /************************
-  Message info    
+  Message info
   ******************************/
 class Message{
 public:
 	int length ;       		// measured by flits;
 	int src;         			//The source of the message
 	int dst;
-	int timeout;   				//measured by circle ,the time limit of message waits for a channel       
+	int timeout;   				//measured by circle ,the time limit of message waits for a channel
 	int begintrans;  //when a message is generated ,it needs some time until transmitting,begintrans record this.
 	int step;       //how many steps this message has walked;
 	bool active; // check this message whether consumed or arrive at dst
-NodeInfo* routpath; // : the ith flit now at routpath[i].node and take routpath[i].buffer 
+NodeInfo* routpath; // : the ith flit now at routpath[i].node and take routpath[i].buffer
 	int count;// the total time a message  consumed
   bool releaselink;  // if the tail of a message shifts , the physical link the message occupied should release.
 
   bool turn;//  used in bubble flow control, if true, then the request escape channel need 2 buffers.
-			
-	
+
+
 
 
 	Message( ){
@@ -57,7 +57,7 @@ NodeInfo* routpath; // : the ith flit now at routpath[i].node and take routpath[
 			routpath[i].node = src;
 			routpath[i].channel = 0;
 			routpath[i].buff = NULL;
-			
+
 		}
 		step = 0;
 		active = true;
@@ -66,7 +66,7 @@ NodeInfo* routpath; // : the ith flit now at routpath[i].node and take routpath[
 		releaselink = false;
 		turn = true;
 		timeout = 0;
-	
+
 	}
 
 	 ~Message(){

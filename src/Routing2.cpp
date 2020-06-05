@@ -1,16 +1,16 @@
-#include"Routing2.h"
-#include<assert.h>
+#include "Routing2.h"
+#include <assert.h>
 
 
 NodeInfo*	Routing2::forward(Message& s ){
-	
+
 
 	int var1 = 0;
 	int var2 = 0;
 	int var = 0;
 	next->node = -1;
 	next->buff = NULL;
-	
+
 	NodeInfo* temp1 = xdimension(s);
 	NodeInfo* temp2 = ydimension(s);
 
@@ -39,7 +39,7 @@ NodeInfo*	Routing2::forward(Message& s ){
 		next->buff->bufferMin(next->channel, MESSLENGTH);
 		next->buff->linkused = true;
 	}
-			
+
 	return next;
 
 }
@@ -51,34 +51,34 @@ NodeInfo*	Routing2::forward(Message& s ){
 check wether next hop could be along x dimension.
 
 
-    
+
 
   */
 
-NodeInfo*	Routing2::xdimension(const Message& s ){   
+NodeInfo*	Routing2::xdimension(const Message& s ){
         HypercubeNode* cur = (*hypercube)[s.routpath[0].node];
 		HypercubeNode* dst = (*hypercube)[s.dst];
-	
+
 
 		int curx = cur->x;
 		int cury = cur->y;
 		int dstx = dst->x;
 		int dsty = dst->y;
-	
+
 		int xdis = dstx - curx;
 		int ydis = dsty - cury;
 		bool special = false;
 
 
 		Buffer* xlink[2] = {cur->bufferxneglink, cur->bufferxposlink};
-	
+
 		int xlinknode[2] = {cur->linkxneg, cur->linkxpos};
 
-		
+
 
 		if(xdis == 0) return NULL;
 
-		if(xdis > k/2  || xdis < -k/2){   
+		if(xdis > k/2  || xdis < -k/2){
 			Buffer* temp = xlink[0];
 			xlink[0] = xlink[1];
 			xlink[0] = temp;
@@ -87,15 +87,15 @@ NodeInfo*	Routing2::xdimension(const Message& s ){
 			xlinknode[0] = xlinknode[1];
 			xlinknode[1] = temp1;
 		}
- 
+
 		if(xlink[xdis > 0]->linkused == true) return NULL;
-		
+
 
       if(xdis > k/2 && curx == 0) special = true;
 	  if(xdis < -k/2 && curx == k-1) special = true;
 	  if((xdis <= k/2  && xdis >= -k/2) && (ydis <= k/2  && ydis >= -k/2))
 		  special = true;
-		
+
 	  if(xlink[xdis > 0]->r1 < MESSLENGTH && !special)
 		   return NULL;
 
@@ -108,7 +108,7 @@ NodeInfo*	Routing2::xdimension(const Message& s ){
 	if(xlink[xdis > 0]->r1 >= MESSLENGTH)
 	  xtemp->channel = R1;  // R1
 	else xtemp->channel = R2;  // R2
- 	
+
 	  return xtemp;
 }
 
@@ -116,7 +116,7 @@ NodeInfo*	Routing2::xdimension(const Message& s ){
 
 NodeInfo*	Routing2::ydimension(const Message& s ){
 
-		
+
 		HypercubeNode* cur = (*hypercube)[s.routpath[0].node];
 		HypercubeNode* dst = (*hypercube)[s.dst];
 
@@ -124,21 +124,21 @@ NodeInfo*	Routing2::ydimension(const Message& s ){
 		int cury = cur->y;
 		int dstx = dst->x;
 		int dsty = dst->y;
-	
+
 		int xdis = dstx - curx;
 		int ydis = dsty - cury;
 		bool special = false;
 
 
 		Buffer* ylink[2] = {cur->bufferyneglink, cur->bufferyposlink};
-	
+
 		int ylinknode[2] = {cur->linkyneg, cur->linkypos};
 
-		
+
 
 		if(ydis == 0) return NULL;
 
-		if(ydis > k/2  || ydis < -k/2){   
+		if(ydis > k/2  || ydis < -k/2){
 			Buffer* temp = ylink[0];
 			ylink[0] = ylink[1];
 			ylink[0] = temp;
@@ -162,12 +162,12 @@ NodeInfo*	Routing2::ydimension(const Message& s ){
 			  if(xdis == 0)
 				  special = true;
 		  }
-		  
+
 		  else{
 			  if(xdis >= 0)
 				  special = true;
 		  }
-	
+
 
 	  }
 	   if(ylink[ydis > 0]->r1 < MESSLENGTH && !special)
@@ -182,6 +182,6 @@ NodeInfo*	Routing2::ydimension(const Message& s ){
 	  if(ylink[ydis > 0]->r1 >= MESSLENGTH)
 	  ytemp->channel = R1;  // R1
 	else ytemp->channel = R2;  // R2
- 	
+
 	  return ytemp;
 }

@@ -2,7 +2,7 @@
 #include "assert.h"
 /*******
 
-  if ALGORITHM == 1, west-first 
+  if ALGORITHM == 1, west-first
   if ALGORITHM == 2, dor-routing
 
 
@@ -14,11 +14,11 @@ NodeInfo*	Routing::forward(Message& s){
 	return forward((*hypercube)[s.routpath[0].node], (*hypercube)[s.dst]);
 }
 
-int Routing::chkWrplnk(HypercubeNode* cur, HypercubeNode* dst){ 
+int Routing::chkWrplnk(HypercubeNode* cur, HypercubeNode* dst){
 	int curx = cur->x;
 	int cury = cur->y;
 
-	
+
 	int dstx = dst->x;
 	int dsty = dst->y;
 
@@ -31,7 +31,7 @@ int Routing::chkWrplnk(HypercubeNode* cur, HypercubeNode* dst){
   if(((cury < dsty) && (dsty - cury) > (k/2)) || ((cury > dsty) && (cury - dsty) > (k/2)))
 	  wraplink ++;
 
- 
+
 
   return wraplink;
 }
@@ -39,7 +39,7 @@ int Routing::chkWrplnk(HypercubeNode* cur, HypercubeNode* dst){
 
 NodeInfo*	Routing::forward(HypercubeNode* cur, HypercubeNode* dst){
 	assert(cur && dst && (cur != dst));
-	
+
 	next->node = -1;
 	next->buff = NULL;
 
@@ -63,21 +63,21 @@ NodeInfo*	Routing::forward(HypercubeNode* cur, HypercubeNode* dst){
 		 check whether buff1 has enough buffer,
 		 n	is the buffer number , if buff1 used, then record it:
 		 chn is R1 or R2 used,and record is the buffer(such as bufferxneg)
-		 
+
 		 ***********/
 
-bool Routing::checkBuffer(Buffer *buff1 , int &chn ,Buffer*& record){  
-	bool k = false;	
+bool Routing::checkBuffer(Buffer *buff1 , int &chn ,Buffer*& record){
+	bool k = false;
 	if(	buff1->linkused == true) {
 		return k;
 	}
 
  	if( chn == R1){
-		if(buff1->r1 >= MESSLENGTH ){		
+		if(buff1->r1 >= MESSLENGTH ){
 			k = true;
 			buff1->linkused = true;
 		}
-		
+
 	}
 	/*else{
 		if(  buff1->r1 >= MESSLENGTH){
@@ -85,15 +85,15 @@ bool Routing::checkBuffer(Buffer *buff1 , int &chn ,Buffer*& record){
 			k = true;
 			buff1->linkused = true;
 		}
-		else if(buff1->r2 >= MESSLENGTH){ 
+		else if(buff1->r2 >= MESSLENGTH){
 			chn = R2;
 			k = true;
 			buff1->linkused = true;
-		}	
+		}
 	}*/
 	if ( k ) {
 		record = buff1;
-		buff1->bufferMin(chn, MESSLENGTH);	
+		buff1->bufferMin(chn, MESSLENGTH);
 	}
 	return k;
 }
@@ -113,7 +113,7 @@ int		Routing::prefer(Buffer *buff1,Buffer *buff2,  int& chn1 , int& chn2, Buffer
 					if (checkBuffer(buff1, chn1, record))
 						return 1;
 					else return 0;
-			
+
 			if( buff1 == NULL && buff2 != NULL)
 					if(checkBuffer(buff2, chn2, record))
 						 return 2;
@@ -144,7 +144,7 @@ int		Routing::prefer(Buffer *buff1,Buffer *buff2,  int& chn1 , int& chn2, Buffer
 				}
 				return bufferslc;
 
-			case 2: 
+			case 2:
 
 				if(checkBuffer(buff2, chn2,record )){
 								bufferslc = 2;
@@ -174,24 +174,24 @@ NodeInfo*	Routing::noWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rout
 	int ydis = dsty - cury;//y方向的偏移
 
 
-	
-	
+
+
     int bufferslc ; // 0 no buffer available, 1: select  x direction buffer,2 y direction, 3 z direction
 	int var1;
 	int var2;
 
-	
+
 
 	int vchx;   // virtual channel of x axis
 	int vchy;
 
 
 	if( xdis < 0) var1 = 0;
-	else { 
+	else {
 		if( xdis == 0) var1 = 1;
 		else if( xdis > 0) var1 = 2;
 	}
-	
+
 	if (xdis == 0)
 	{
 		if (ydis < 0) var2 = 0;
@@ -204,15 +204,15 @@ NodeInfo*	Routing::noWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rout
 	{
 		var2 = 1;//xy路由算法：x方向的偏移不为0时,不能走y方向
 	}
-	
 
-     
-	
+
+
+
 
 	Buffer* xlink[3] = {cur->bufferxneglink, NULL, cur->bufferxposlink};
 	Buffer* ylink[3] = {cur->bufferyneglink, NULL, cur->bufferyposlink};
 
-	
+
 	int xlinknode[3] = {cur->linkxneg, -1, cur->linkxpos};
 	int ylinknode[3] = {cur->linkyneg, -1, cur->linkypos};
 
@@ -230,7 +230,7 @@ NodeInfo*	Routing::noWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rout
 		/*if( var1 != 1) {
 			vchx = R2;
 			vchy = R1;
-		
+
 		}
 		else{
 			vchy = R2;
@@ -251,16 +251,16 @@ NodeInfo*	Routing::noWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rout
 						next->node = ylinknode[var2];
 						next->channel = vchy;
 						break;
-				
+
 					}
 					return next;
-		
+
 	}
 }
 
 
 
-NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //routing one wraplink. 
+NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //routing one wraplink.
 	assert( cur && dst && (cur != dst));
 	int curx = cur->x;
 	int cury = cur->y;
@@ -272,39 +272,39 @@ NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rou
 	int xdis = dstx - curx;
 	int ydis = dsty - cury;
 
-	
-	
+
+
     int bufferslc ; // 0 no buffer available, 1: select  x direction buffer,2 y direction, 3 z direction
 	int var1;
 	int var2;
 
-	
+
 
 	int vchx = R1;   // virtual channel of x axis
 	int vchy = R1;
 
 
 	if( xdis < 0) var1 = 0;
-	else { 
+	else {
 		if( xdis == 0) var1 = 1;
 		else if( xdis > 0) var1 = 2;
 	}
 
 	if( ydis < 0) var2 = 0;
-	else { 
+	else {
 		if( ydis == 0) var2 = 1;
 		else if( ydis > 0) var2 = 2;
 	}
 
-	
+
 
 	Buffer* xlink[3] = {cur->bufferxneglink, NULL, cur->bufferxposlink};
 	Buffer* ylink[3] = {cur->bufferyneglink, NULL, cur->bufferyposlink};
 
-	
+
 	int xlinknode[3] = {cur->linkxneg, -1, cur->linkxpos};
 	int ylinknode[3] = {cur->linkyneg, -1, cur->linkypos};
-	
+
 
 	if(xdis > k/2  || xdis < -k/2){
 		Buffer* temp = xlink[0];
@@ -318,7 +318,7 @@ NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rou
 		if( xdis < -k/2 && cur->x == k-1) vchx = R2;
 	}
 
-	
+
 	if(ydis > k/2  || ydis < -k/2){
 		 Buffer* temp = ylink[0];
 		ylink[0] = ylink[2];
@@ -331,8 +331,8 @@ NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rou
 		if( ydis < -k/2 && cur->y == k-1) vchy = R2;
 	}
 
-	
-	
+
+
 
 
 		bufferslc =	prefer(xlink[var1], ylink[var2], vchx, vchy,  next->buff);
@@ -348,20 +348,20 @@ NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //rou
 						next->node = ylinknode[var2];
 						next->channel = vchy;
 						break;
-				
+
 					}
 	return next;
 	}
-    
 
 
-		
+
+
 
 NodeInfo*	Routing::twoWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){
 			assert( cur && dst && (cur != dst));
 	int curx = cur->x;
 	int cury = cur->y;
-	
+
 	//R1 preferred, leave more space for escape channel R2.
 	int dstx = dst->x;
 	int dsty = dst->y;
@@ -370,26 +370,26 @@ NodeInfo*	Routing::twoWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){
 	int ydis = dsty - cury;
 
 
-	
-	
+
+
     int bufferslc ; // 0 no buffer available, 1: select  x direction buffer,2 y direction, 3  direction
 	int var1;
 	int var2;
-	
-	
+
+
 
 	int vchx = R1;   // virtual channel of x axis
 	int vchy = R1;
 
 
 	if( xdis < 0) var1 = 0;
-	else { 
+	else {
 		if( xdis == 0) var1 = 1;
 		else if( xdis > 0) var1 = 2;
 	}
 
 	if( ydis < 0) var2 = 0;
-	else { 
+	else {
 		if( ydis == 0) var2 = 1;
 		else if( ydis > 0) var2 = 2;
 	}
@@ -399,7 +399,7 @@ NodeInfo*	Routing::twoWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){
 	Buffer* xlink[3] = {cur->bufferxposlink, NULL, cur->bufferxneglink};
 	Buffer* ylink[3] = {cur->bufferyposlink, NULL, cur->bufferyneglink};
 
-	
+
 	int xlinknode[3] = {cur->linkxpos, -1, cur->linkxneg};
 	int ylinknode[3] = {cur->linkypos, -1, cur->linkyneg};
 
@@ -419,7 +419,7 @@ NodeInfo*	Routing::twoWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){
 						next->node = ylinknode[var2];
 						next->channel = vchy;
 						break;
-					
+
 					}
 	return next;
 }

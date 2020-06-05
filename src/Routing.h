@@ -32,15 +32,15 @@ bool			checkBuffer(Buffer *buff1 , int &chn, Buffer*& record);
 
 
 NodeInfo*	forward(Message&);
-NodeInfo*	forward(HypercubeNode* cur, HypercubeNode* dst);//return the nextnode of cur. 
+NodeInfo*	forward(HypercubeNode* cur, HypercubeNode* dst);//return the nextnode of cur.
 NodeInfo*	noWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst);//from cur to do not need wraplink.
-NodeInfo*	oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst);//from cur to  need  one wraplink. 
+NodeInfo*	oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst);//from cur to  need  one wraplink.
 NodeInfo*	twoWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst);//from cur to  need  two wraplink.
 
 
-int		prefer(Buffer *buff1,Buffer *buff2,  int& chn1 , int& chn2, Buffer*& buff);    
+int		prefer(Buffer *buff1,Buffer *buff2,  int& chn1 , int& chn2, Buffer*& buff);
 
-};														   
+};
 
 
 

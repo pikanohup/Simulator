@@ -17,7 +17,7 @@ clue with flow control
 #include "Allrouting.h"
 class Hypercube;
 class Message;
-extern int flowalg; // flow control algorithm 
+extern int flowalg; // flow control algorithm
 
 
 
@@ -43,7 +43,7 @@ NodeInfo* ydimension(const Message&); // check wether next hop could be along y 
 
 
 
-};														  
+};
 
 
 

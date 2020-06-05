@@ -12,9 +12,9 @@ public:
 	void clearAll();
 	~Hypercube()
 	{
-		
+
 		delete [] head;
-	
+
 	}
 	int getNode(){return k;}
 private:
