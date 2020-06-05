@@ -18,29 +18,29 @@ int getsize(vector<Message*>* mess){
 
 
 
-void outtotest(vector<Message*>* allvecmess, Q2DTorus* tor){
+void outtotest(vector<Message*>* allvecmess, Hypercube* hcube){
 	ofstream out = ofstream("test");
 	for(int i = 0; i < 10; i++){
 			vector<Message*>& vecmess = allvecmess[i];
 		 for(vector<Message*>::iterator it = vecmess.begin(); it != vecmess.end(); it++){
-			out << "count: " << (*it)->count << "  src: ( " << (*tor)[(*it)->src]->x << " ," << (*tor)[(*it)->src]->y
-			<< ") "	<< " dst: ( "  << (*tor)[(*it)->dst]->x	<< " ," << (*tor)[(*it)->dst]->y << ") "
-			<< " head:( " <<  (*tor)[(*it)->routpath[0].node]->x << " ," 
-			<< (*tor)[(*it)->routpath[0].node]->y
-			<< ", R" << (*it)->routpath[0].channel << ")  "<< " tail:( " <<  (*tor)[(*it)->routpath[19].node]->x << " ," << (*tor)[(*it)->routpath[19].node]->y
+			out << "count: " << (*it)->count << "  src: ( " << (*hcube)[(*it)->src]->x << " ," << (*hcube)[(*it)->src]->y
+			<< ") "	<< " dst: ( "  << (*hcube)[(*it)->dst]->x	<< " ," << (*hcube)[(*it)->dst]->y << ") "
+			<< " head:( " <<  (*hcube)[(*it)->routpath[0].node]->x << " ," 
+			<< (*hcube)[(*it)->routpath[0].node]->y
+			<< ", R" << (*it)->routpath[0].channel << ")  "<< " tail:( " <<  (*hcube)[(*it)->routpath[19].node]->x << " ," << (*hcube)[(*it)->routpath[19].node]->y
 			<<  ") "<<  endl;
 		}
 	}
 	
 }
 
-void bufferleft(Q2DTorus* tor, int knode){
+void bufferleft(Hypercube* hcube, int knode){
 		int star1 = 0, star2 = 0, flag = 0, star3 = 0, star4 = 0;
 	for(int sta = 0; sta < knode * knode ; sta++){
-		star1 += ((*tor)[sta]->bufferxneg->c);
-		star2 += ((*tor)[sta]->bufferxpos->c);
-		star3 += ((*tor)[sta]->bufferyneg->c);
-		star4 += ((*tor)[sta]->bufferypos->c);			
+		star1 += ((*hcube)[sta]->bufferxneg->c);
+		star2 += ((*hcube)[sta]->bufferxpos->c);
+		star3 += ((*hcube)[sta]->bufferyneg->c);
+		star4 += ((*hcube)[sta]->bufferypos->c);			
 	
 	}
 	cout << "buffer left --->" << star1 << " " << star2 << " " << star3 << " " << " " << star4  << endl;
@@ -48,7 +48,7 @@ void bufferleft(Q2DTorus* tor, int knode){
 }
 
 
-void drain(vector<Message*>* allvecmess, Q2DTorus* tor, Event* s){
+void drain(vector<Message*>* allvecmess, Hypercube* hcube, Event* s){
 
 
 		

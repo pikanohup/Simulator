@@ -1,4 +1,4 @@
-#include "Q2DTorusNode.h"
+#include "HypercubeNode.h"
 
 void Buffer::bufferMin (int chn , int n) {       //share buffers are used first,when no share buffers ,		
 			
@@ -41,7 +41,7 @@ void	Buffer::bufferPlus (int chn ,int n) {
 
 
 
-void	Q2DTorusNode::setCoordinate(int _nodeid ,int _x, int _y){
+void	HypercubeNode::setCoordinate(int _nodeid ,int _x, int _y){
 				nodeid = _nodeid;
 				x = _x;
 				y = _y;
@@ -49,7 +49,7 @@ void	Q2DTorusNode::setCoordinate(int _nodeid ,int _x, int _y){
 				}
 
 
-void	Q2DTorusNode::setbuffer( int buff1, int buff2)            //   num is the share buffer number
+void	HypercubeNode::setbuffer( int buff1, int buff2)            //   num is the share buffer number
 	{ 
 
 		
@@ -91,7 +91,7 @@ void	Q2DTorusNode::setbuffer( int buff1, int buff2)            //   num is the s
 
 	}
 
-void	Q2DTorusNode::setLinkBuffer(int x1, int x2, int y1, int y2)
+void	HypercubeNode::setLinkBuffer(int x1, int x2, int y1, int y2)
 	{
 		linkxneg = x1;
 		linkxpos = x2;
@@ -99,30 +99,30 @@ void	Q2DTorusNode::setLinkBuffer(int x1, int x2, int y1, int y2)
 		linkypos = y2;
 		
 		
-		if (linkxneg != -1) bufferxneglink = (*torus)[linkxneg]->bufferxpos;
+		if (linkxneg != -1) bufferxneglink = (*hypercube)[linkxneg]->bufferxpos;
 		else bufferxneglink = NULL;
-		if (linkxpos != -1) bufferxposlink = (*torus)[linkxpos]->bufferxneg;
+		if (linkxpos != -1) bufferxposlink = (*hypercube)[linkxpos]->bufferxneg;
 		else bufferxposlink = NULL;
 			
-		if (linkyneg != -1) bufferyneglink = (*torus)[linkyneg]->bufferypos;
+		if (linkyneg != -1) bufferyneglink = (*hypercube)[linkyneg]->bufferypos;
 		else bufferyneglink = NULL;
-	    if (linkypos != -1) bufferyposlink = (*torus)[linkypos]->bufferyneg;
+	    if (linkypos != -1) bufferyposlink = (*hypercube)[linkypos]->bufferyneg;
 		else bufferyposlink = NULL;
 	  
 	
 	}
 
-void	Q2DTorusNode::bufferPlus(Buffer* buff, int chn , int n)
+void	HypercubeNode::bufferPlus(Buffer* buff, int chn , int n)
 	  {
 			buff->bufferPlus(chn,n);
 	  }
 
-void	 Q2DTorusNode::bufferMin(Buffer* buff, int chn,int n)
+void	 HypercubeNode::bufferMin(Buffer* buff, int chn,int n)
 	  {
 			buff->bufferMin(chn,n);
 	  }
 
-void	Q2DTorusNode::clearBuffer(){
+void	HypercubeNode::clearBuffer(){
 	  		bufferxneg->linkused  = false;
 			bufferxpos->linkused  = false;
 			bufferyneg->linkused  = false;
@@ -131,6 +131,6 @@ void	Q2DTorusNode::clearBuffer(){
 		 
 	  }
 
-void    Q2DTorusNode::setTorus(Q2DTorus * torus){
-		this->torus = torus;
+void    HypercubeNode::sethypercube(Hypercube * hypercube){
+		this->hypercube = hypercube;
 }

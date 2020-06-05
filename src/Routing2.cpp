@@ -56,8 +56,8 @@ check wether next hop could be along x dimension.
   */
 
 NodeInfo*	Routing2::xdimension(const Message& s ){   
-        Q2DTorusNode* cur = (*torus)[s.routpath[0].node];
-		Q2DTorusNode* dst = (*torus)[s.dst];
+        HypercubeNode* cur = (*hypercube)[s.routpath[0].node];
+		HypercubeNode* dst = (*hypercube)[s.dst];
 	
 
 		int curx = cur->x;
@@ -117,8 +117,8 @@ NodeInfo*	Routing2::xdimension(const Message& s ){
 NodeInfo*	Routing2::ydimension(const Message& s ){
 
 		
-		Q2DTorusNode* cur = (*torus)[s.routpath[0].node];
-		Q2DTorusNode* dst = (*torus)[s.dst];
+		HypercubeNode* cur = (*hypercube)[s.routpath[0].node];
+		HypercubeNode* dst = (*hypercube)[s.dst];
 
 		int curx = cur->x;
 		int cury = cur->y;

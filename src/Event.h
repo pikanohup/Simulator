@@ -19,8 +19,8 @@
 #include"Routing.h"
 #include"Message.h"
 //#include"AllMessage.h"
-#include"Q2DTorus.h"
-#include"Q2DTorusNode.h"
+#include"Hypercube.h"
+#include"HypercubeNode.h"
 
 
 class Event{
@@ -29,8 +29,8 @@ public:
 	double totalcir; // total circle all the messages take;
 	int messarrive; // how many message arrived
 	Allrouting* rout;
-	Q2DTorus* tor;
-	int k;// k * k *k torus
+	Hypercube* hcube;
+	int k;// k * k *k hypercube
 	
 Message* 	genMes();          //generate a message
 void        forwardMes(Message&);//forward a message

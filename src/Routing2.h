@@ -12,10 +12,10 @@ clue with flow control
 #ifndef RT_2_H
 #define RT_2_H
 
-#include "Q2DTorusNode.h"
+#include "HypercubeNode.h"
 #include "Message.h"
 #include "Allrouting.h"
-class Q2DTorus;
+class Hypercube;
 class Message;
 extern int flowalg; // flow control algorithm 
 
@@ -24,9 +24,9 @@ extern int flowalg; // flow control algorithm
 class Routing2:public Allrouting{
 
 public:
-	Routing2(Q2DTorus* torus1){
-		torus = torus1;
-		k = torus1->getNode();
+	Routing2(Hypercube* hypercube1){
+		hypercube = hypercube1;
+		k = hypercube1->getNode();
 		next = new NodeInfo();
 		xtemp = new NodeInfo();
 		ytemp = new NodeInfo();

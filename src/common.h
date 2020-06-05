@@ -4,7 +4,7 @@
 
 
 
-#include"Q2DTorus.h"
+#include"Hypercube.h"
 #include"Routing.h"
 #include"Event.h"
 #include<vector>
@@ -13,9 +13,9 @@
 
 
 
-void outtotest(vector<Message*>* vecmess, Q2DTorus* tor);
-void bufferleft(Q2DTorus* tor, int knode);
-void drain(vector<Message*>* vecmess, Q2DTorus* tor, Event* s);
+void outtotest(vector<Message*>* vecmess, Hypercube* hcube);
+void bufferleft(Hypercube* hcube, int knode);
+void drain(vector<Message*>* vecmess, Hypercube* hcube, Event* s);
 
 
 

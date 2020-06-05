@@ -11,10 +11,10 @@ extern int ALGORITHM;
 
 NodeInfo*	Routing::forward(Message& s){
 
-	return forward((*torus)[s.routpath[0].node], (*torus)[s.dst]);
+	return forward((*hypercube)[s.routpath[0].node], (*hypercube)[s.dst]);
 }
 
-int Routing::chkWrplnk(Q2DTorusNode* cur, Q2DTorusNode* dst){ 
+int Routing::chkWrplnk(HypercubeNode* cur, HypercubeNode* dst){ 
 	int curx = cur->x;
 	int cury = cur->y;
 
@@ -37,7 +37,7 @@ int Routing::chkWrplnk(Q2DTorusNode* cur, Q2DTorusNode* dst){
 }
 
 
-NodeInfo*	Routing::forward(Q2DTorusNode* cur, Q2DTorusNode* dst){
+NodeInfo*	Routing::forward(HypercubeNode* cur, HypercubeNode* dst){
 	assert(cur && dst && (cur != dst));
 	
 	next->node = -1;
@@ -161,7 +161,7 @@ int		Routing::prefer(Buffer *buff1,Buffer *buff2,  int& chn1 , int& chn2, Buffer
 
 
 
-NodeInfo*	Routing::noWrapLinkrt(Q2DTorusNode* cur, Q2DTorusNode* dst){  //routing without wraplink.
+NodeInfo*	Routing::noWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //routing without wraplink.
 	assert( cur && dst && (cur != dst));
 	int curx = cur->x;
 	int cury = cur->y;
@@ -260,7 +260,7 @@ NodeInfo*	Routing::noWrapLinkrt(Q2DTorusNode* cur, Q2DTorusNode* dst){  //routin
 
 
 
-NodeInfo* Routing::oneWrapLinkrt(Q2DTorusNode* cur, Q2DTorusNode* dst){  //routing one wraplink. 
+NodeInfo* Routing::oneWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){  //routing one wraplink. 
 	assert( cur && dst && (cur != dst));
 	int curx = cur->x;
 	int cury = cur->y;
@@ -357,7 +357,7 @@ NodeInfo* Routing::oneWrapLinkrt(Q2DTorusNode* cur, Q2DTorusNode* dst){  //routi
 
 		
 
-NodeInfo*	Routing::twoWrapLinkrt(Q2DTorusNode* cur, Q2DTorusNode* dst){
+NodeInfo*	Routing::twoWrapLinkrt(HypercubeNode* cur, HypercubeNode* dst){
 			assert( cur && dst && (cur != dst));
 	int curx = cur->x;
 	int cury = cur->y;

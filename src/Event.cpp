@@ -10,15 +10,15 @@ Event::Event(Allrouting * rout1){
 	 totalcir =0 ;
 	 messarrive = 0;
 	rout = rout1;
-	tor = rout1->torus;
+	hcube = rout1->hypercube;
 	k = rout1->k;
 }
 
 
 
 Message*  Event::genMes(){   //generate a message
-		Q2DTorus* torus =NULL;
-	if(rout != NULL)  torus = rout->torus;
+		Hypercube* hypercube =NULL;
+	if(rout != NULL)  hypercube = rout->hypercube;
 	//uniform流量模式
 	if(GENERATETYPE == 1){
 		int tempRand;
@@ -42,8 +42,8 @@ Message*  Event::genMes(){   //generate a message
 	
 		while (1){
 		tempRand = abs(rand()) % (k * k );
-		 x = (*torus)[tempRand]->x;
-		 y = (*torus)[tempRand]->y;
+		 x = (*hypercube)[tempRand]->x;
+		 y = (*hypercube)[tempRand]->y;
 		
 		if ( x != (k - 1 - y) || y != (k - 1 - x) )
 			break;
@@ -62,8 +62,8 @@ Message*  Event::genMes(){   //generate a message
 	
 		while (1){
 		tempRand = abs(rand()) % (k * k);
-		 x = (*torus)[tempRand]->x;
-		 y = (*torus)[tempRand]->y;
+		 x = (*hypercube)[tempRand]->x;
+		 y = (*hypercube)[tempRand]->y;
 		
 		if ( x != y  )
 			break;

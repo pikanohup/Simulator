@@ -24,7 +24,7 @@ int main()
 	 flowalg = 1;
 	 totalcircle = 100000;
 	 knode    = 4;
-	 Q2DTorus* tor = NULL;//网络结构，以前实现的torus网络，为了简单，我改为了mesh结构但名字没有改
+	 Hypercube* hcube = NULL;//网络结构，以前实现的hypercube网络，为了简单，我改为了mesh结构但名字没有改
 	 Event* s = NULL;
 	 int r1, r2;
 	 string gen[5] = {"0","1", "2", "3", "4"};
@@ -68,14 +68,14 @@ int main()
 
 				 r1 = r1buffer[round] * MESSLENGTH;	//以flit个数为基本单位
 				 r2 = r2buffer[round] * MESSLENGTH;	
-			     tor = new Q2DTorus(knode, r1, r2); //初始化网络结构
+			     hcube = new Hypercube(knode, r1, r2); //初始化网络结构
 				 
 
 				 switch(round){
 
 				 case 1: case 2:
 					   ALGORITHM = alg[round];							  
-					   rout1 = new Routing(tor);
+					   rout1 = new Routing(hcube);
 					   break;
 				 }
 				 
@@ -183,7 +183,7 @@ int main()
 
 	else {
 			cout << "Saturation point, drain......." << endl;
-			drain(allvecmess,tor,s);		
+			drain(allvecmess,hcube,s);		
 			int size = 0;
 			for(int j = 0; j < 10; j++){
 				if(!allvecmess[j].empty()){
@@ -191,8 +191,8 @@ int main()
 				}
 			}
 			cout << "in the network:      "  << size << endl;
-			outtotest(allvecmess,tor);
-			bufferleft(tor, knode);
+			outtotest(allvecmess,hcube);
+			bufferleft(hcube, knode);
 			cout << "max:" << max << endl;
 			break;
 	}
@@ -212,7 +212,7 @@ int main()
 					delete (*it);
 			}
 			delete rout1;
-			delete tor;
+			delete hcube;
 			delete s;	
 
 

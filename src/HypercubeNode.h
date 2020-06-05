@@ -1,8 +1,8 @@
-//  3 dimension torus nodes. 
+//  3 dimension hypercube nodes. 
 //  20/3/2009, Luo Wei.
 
-#ifndef Q2DTorusNode_H
-#define Q2DTorusNode_H
+#ifndef HypercubeNode_H
+#define HypercubeNode_H
 #include<iostream>
 #include<string>
 #include<assert.h>
@@ -10,8 +10,8 @@
 #define R2  2
 using namespace std;
 #define MESSLENGTH 16
-#include "Q2DTorus.h"
-class Q2DTorus;
+#include "Hypercube.h"
+class Hypercube;
 
 class Buffer{   // R1 and R2 reserve some buffers separately,they can also use sharebuffer.
 public:
@@ -30,7 +30,7 @@ public:
 /**************************************************
 
 
-	this class define the info of a flit in the torus node
+	this class define the info of a flit in the hypercube node
 	including nodeid, buffer
 	************************************************/
 class NodeInfo{  
@@ -46,7 +46,7 @@ public:				//nextnode is the node to be routed,and vchannel is the virtual chann
 
 
 
-class Q2DTorusNode{
+class HypercubeNode{
 
 private:
 	int nodeid;
@@ -62,7 +62,7 @@ public:
 	int linkyneg;
 	int linkypos;
 
-	Q2DTorus* torus;
+	Hypercube* hypercube;
 	
 	Buffer* bufferxneglink;
 	Buffer* bufferxposlink;//the buffer x positive direction link to, it is the buffer of neighbor node
@@ -83,7 +83,7 @@ void	setbuffer( int buff1, int buff2);            //   num is the share buffer n
 	
 void	setLinkBuffer(int x1, int x2, int y1, int y2);
 
-void    setTorus(Q2DTorus * torus);	
+void    sethypercube(Hypercube * hypercube);	
 
 void	bufferPlus(Buffer* buff, int chn , int n);
 	 
@@ -92,7 +92,7 @@ void	bufferMin(Buffer* buff, int chn,int n);
 void	clearBuffer();
 
 
-	~Q2DTorusNode(){
+	~HypercubeNode(){
 		delete  bufferxneg;
 		delete  bufferyneg;
 		delete  bufferxpos;
