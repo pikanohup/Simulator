@@ -3,17 +3,18 @@
 
 #include "Hypercube.h"
 #include "Message.h"
+
 class Message;
 class Hypercube;
 class NodeInfo;
-class Allrouting{
-public:
+
+class Allrouting {
+ public:
   NodeInfo* next;
-	Hypercube* hypercube;
-	int k;
-	virtual NodeInfo*	forward(Message& s){return NULL;};
+  Hypercube* hypercube;
+  int k;
+  virtual NodeInfo* forward(Message& s) { return NULL; };
   // implemented by child
 };
-
 
 #endif
