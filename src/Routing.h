@@ -16,23 +16,11 @@ class Routing : public Allrouting {
     next = new NodeInfo();
   }
 
-  int chkWrplnk(
-      HypercubeNode* cur,
-      HypercubeNode* dst);  // check how many wrap links need from cur to dst.
   bool checkBuffer(Buffer* buff1, int& chn, Buffer*& record);
 
   NodeInfo* forward(Message&);
-  NodeInfo* forward(HypercubeNode* cur,
-                    HypercubeNode* dst);  // return the nextnode of cur.
-  NodeInfo* noWrapLinkrt(
-      HypercubeNode* cur,
-      HypercubeNode* dst);  // from cur to do not need wraplink.
-  NodeInfo* oneWrapLinkrt(
-      HypercubeNode* cur,
-      HypercubeNode* dst);  // from cur to  need  one wraplink.
-  NodeInfo* twoWrapLinkrt(
-      HypercubeNode* cur,
-      HypercubeNode* dst);  // from cur to  need  two wraplink.
+  NodeInfo* forward(HypercubeNode* cur, HypercubeNode* dst);
+  NodeInfo* noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst);  // from cur to do not need wraplink.
 
   int prefer(Buffer* buff1, Buffer* buff2, int& chn1, int& chn2, Buffer*& buff);
 };

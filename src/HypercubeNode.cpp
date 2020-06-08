@@ -29,64 +29,36 @@ void Buffer::bufferPlus(int chn, int n) {
   }
 }
 
-void HypercubeNode::setCoordinate(int _nodeid, int _x, int _y) {
+void HypercubeNode::setNode(int d, int _nodeid, Hypercube* _hypercube) {
   nodeid = _nodeid;
-  x = _x;
-  y = _y;
+  hypercube = _hypercube;
 }
 
-void HypercubeNode::setBuffer(int buff1, int buff2) {
-  bufferxneg = new Buffer();
-  bufferxpos = new Buffer();
-  bufferyneg = new Buffer();
-  bufferypos = new Buffer();
+void HypercubeNode::setBuffer(int d, int buff1, int buff2) {
+  buffers.reserve(d);
 
-  clearBuffer();
+  for (int i = 0; i < d; i++) {
+    Buffer* buffer = new Buffer();
 
-  bufferxneg->r1 = buff1;
-  bufferxpos->r1 = buff1;
-  bufferyneg->r1 = buff1;
-  bufferypos->r1 = buff1;
+    buffer->linkused = false;
+    buffer->r1 = buff1;
+    buffer->r2 = buff2;
+    buffer->c = (buff1 + buff2) / MESSLENGTH;
+    buffer->s = 0;
 
-  bufferxneg->r2 = buff2;
-  bufferxpos->r2 = buff2;
-  bufferyneg->r2 = buff2;
-  bufferypos->r2 = buff2;
-
-  bufferxneg->c = (buff1 + buff2) / MESSLENGTH;
-  bufferxpos->c = (buff1 + buff2) / MESSLENGTH;
-  bufferyneg->c = (buff1 + buff2) / MESSLENGTH;
-  bufferypos->c = (buff1 + buff2) / MESSLENGTH;
-
-  bufferxneg->s = 0;
-  bufferxpos->s = 0;
-  bufferyneg->s = 0;
-  bufferypos->s = 0;
+    buffers.push_back(buffer);
+  }
 }
 
-void HypercubeNode::setLinkBuffer(int x1, int x2, int y1, int y2) {
-  linkxneg = x1;
-  linkxpos = x2;
-  linkyneg = y1;
-  linkypos = y2;
+void HypercubeNode::setLinks(int d) {
+  links.reserve(d);
+  bufferLinks.reserve(d);
 
-  if (linkxneg != -1)
-    bufferxneglink = (*hypercube)[linkxneg]->bufferxpos;
-  else
-    bufferxneglink = NULL;
-  if (linkxpos != -1)
-    bufferxposlink = (*hypercube)[linkxpos]->bufferxneg;
-  else
-    bufferxposlink = NULL;
-
-  if (linkyneg != -1)
-    bufferyneglink = (*hypercube)[linkyneg]->bufferypos;
-  else
-    bufferyneglink = NULL;
-  if (linkypos != -1)
-    bufferyposlink = (*hypercube)[linkypos]->bufferyneg;
-  else
-    bufferyposlink = NULL;
+  for (int i = 0; i < d; i++) {
+    int neighbour = nodeid ^ (1 << i);
+    links.push_back(neighbour);
+    bufferLinks.push_back(((*hypercube)[neighbour]->buffers)[i]);
+  }
 }
 
 void HypercubeNode::bufferPlus(Buffer* buff, int chn, int n) {
@@ -98,12 +70,7 @@ void HypercubeNode::bufferMin(Buffer* buff, int chn, int n) {
 }
 
 void HypercubeNode::clearBuffer() {
-  bufferxneg->linkused = false;
-  bufferxpos->linkused = false;
-  bufferyneg->linkused = false;
-  bufferypos->linkused = false;
-}
-
-void HypercubeNode::setHypercube(Hypercube* hypercube) {
-  this->hypercube = hypercube;
+  for (vector<Buffer*>::iterator it = bufferLinks.begin(); it != bufferLinks.end(); it++) {
+    (*it)->linkused = false;
+  }
 }

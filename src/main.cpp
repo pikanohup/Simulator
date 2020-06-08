@@ -16,8 +16,7 @@ int main() {
     flowalg = 1;
     totalcircle = 100000;
     knode = 4;
-    Hypercube* hcube =
-        NULL;  //网络结构，以前实现的hypercube网络，为了简单，我改为了mesh结构但名字没有改
+    Hypercube* hcube = NULL;
     Event* s = NULL;
     int r1, r2;
     string gen[5] = {"0", "1", "2", "3", "4"};
@@ -40,11 +39,11 @@ int main() {
 
     /***
     round = 2 : Dimension Order
-Routing，该程序只实现了xy路由，所以round的值不改变，只为2，循环只在实现多种路由算法时才有意义
-***/
+    Routing，该程序只实现了xy路由，所以round的值不改变，只为2，循环只在实现多种路由算法时才有意义***/
 
     for (int round = 2; round < 3; round++) {
-      ofstream out = ofstream(filename[round].c_str());
+      // ofstream out = ofstream(filename[round].c_str());
+      ofstream out = ofstream("result.txt");
       float linkrate = 0;
       double max = 0;
 
@@ -74,8 +73,9 @@ Routing，该程序只实现了xy路由，所以round的值不改变，只为2�
                     (MESSLENGTH *
                      10));  //每个周期每个节点产生的message数，还要除以10是因为allvecmess有10个元素
         // saturationRate = (double)(knode * 2 * 2) / (double)(knode * knode);
-        // 在mesh网络中的饱和吞吐量 msgpercir = linkrate * saturationRate * knode
-        // * knode; 每个周期每个节点产生的flit数
+        // 在mesh网络中的饱和吞吐量 msgpercir = linkrate * saturationRate *
+        // knode
+        // * knode; 每个周期每个节点产生的flit数 pika
 
         vector<Message*> allvecmess[10];
         float k = 0;
@@ -87,7 +87,7 @@ Routing，该程序只实现了xy路由，所以round的值不改变，只为2�
 
   ***********************************************************************************/
         //执行totalcircle个周期，getsize(allvecmess) <
-        //threshold只是自己加的限制条件，可以有也可以删除，具体的threshold和totalcircle值也可以在前面修改
+        // threshold只是自己加的限制条件，可以有也可以删除，具体的threshold和totalcircle值也可以在前面修改
         for (int i = 0; i < totalcircle && getsize(allvecmess) < threshold;
              i++) {
           vector<Message*>& vecmess = allvecmess[i % 10];

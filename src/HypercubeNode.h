@@ -4,6 +4,8 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <vector>
+
 #include "Hypercube.h"
 
 #define R1 1
@@ -12,7 +14,6 @@ using namespace std;
 #define MESSLENGTH 16
 
 class Hypercube;
-
 class Buffer {  // R1 and R2 reserve some buffers separately,they can also use
                 // sharebuffer.
  public:
@@ -45,41 +46,23 @@ class HypercubeNode {
   int nodeid;
 
  public:
-  Buffer* bufferxneg;  // the buffer of x axis negative direction
-  Buffer* bufferxpos;  // the buffer of x axis positive direction
-  Buffer* bufferyneg;
-  Buffer* bufferypos;
-
-  int linkxneg;  // the node to x axis negative direction link
-  int linkxpos;
-  int linkyneg;
-  int linkypos;
+  vector<Buffer*> buffers;
+  vector<int> links;
+  vector<Buffer*> bufferLinks;
 
   Hypercube* hypercube;
 
-  Buffer* bufferxneglink;
-  Buffer* bufferxposlink;  // the buffer x positive direction link to, it is the
-                           // buffer of neighbor node
-  Buffer* bufferyneglink;  // ...
-  Buffer* bufferyposlink;
-
-  int x;  // x coordinate
-  int y;  // y coordinate
-
-  void setCoordinate(int _nodeid, int _x, int _y);
-  void setBuffer(int buff1, int buff2);  // num is the share buffer number
-  void setLinkBuffer(int x1, int x2, int y1, int y2);
-  void setHypercube(Hypercube* hypercube);
+  ~HypercubeNode() {
+    for (vector<Buffer*>::iterator it = buffers.begin(); it != buffers.end(); it++) {
+      delete (*it);
+    }
+  }
+  void setNode(int d, int _nodeid, Hypercube* _hypercube);
+  void setBuffer(int d, int buff1, int buff2);
+  void setLinks(int d);
   void bufferPlus(Buffer* buff, int chn, int n);
   void bufferMin(Buffer* buff, int chn, int n);
   void clearBuffer();
-
-  ~HypercubeNode() {
-    delete bufferxneg;
-    delete bufferyneg;
-    delete bufferxpos;
-    delete bufferypos;
-  }
 };
 
 #endif

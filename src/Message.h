@@ -4,6 +4,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+
 #include "HypercubeNode.h"
 
 #define PROCESSTIME 16
