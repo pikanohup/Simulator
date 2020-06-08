@@ -177,7 +177,6 @@ int main() {
           }
           cout << "in the network:      " << size << endl;
           outtotest(allvecmess, hcube);
-          bufferleft(hcube, knode);
           cout << "max:" << max << endl;
           break;
         }

@@ -3,106 +3,25 @@
 #include "Event.h"
 #include "Message.h"
 
-extern int GENERATETYPE;
+// extern int GENERATETYPE;
 
-Event::Event(Allrouting* rout1) {
-  consumed = 0;
-  totalcir = 0;
-  messarrive = 0;
-  rout = rout1;
-  hcube = rout1->hypercube;
-  k = rout1->k;
+Event::Event(Allrouting* rout) : consumed(0), totalcir(0), messarrive(0), rout(rout), hcube(rout->hypercube) {
 }
 
-Message* Event::genMes() {  // generate a message
+Message* Event::genMes() {
   Hypercube* hypercube = NULL;
   if (rout != NULL) hypercube = rout->hypercube;
-  // uniform流量模式
-  if (GENERATETYPE == 1) {
-    int tempRand;
-    int src, dest;
-    tempRand = abs(rand()) % (k * k);
-    src = tempRand;
-    while (1) {
-      tempRand = abs(rand()) % (k * k);
-      if (tempRand != src) {
-        dest = tempRand;
-        break;
-      }
+
+  // GENERATETYPE === 1
+  int num = pow(2, rout->degree);
+  int tempRand = abs(rand()) % num;
+  int src = tempRand;
+  while (1) {
+    tempRand = abs(rand()) % num;
+    if (tempRand != src) {
+      int dest = tempRand;
+      return new Message(src, dest);
     }
-    return new Message(src, dest);
-  }
-  if (GENERATETYPE == 2) {
-    int tempRand;
-    int src, dest;
-    int x;
-    int y;
-
-    while (1) {
-      tempRand = abs(rand()) % (k * k);
-      x = (*hypercube)[tempRand]->x;
-      y = (*hypercube)[tempRand]->y;
-
-      if (x != (k - 1 - y) || y != (k - 1 - x)) break;
-    }
-    dest = (k - 1 - y) + (k - 1 - x) * k;
-    src = tempRand;
-
-    return new Message(src, dest);
-  }
-
-  if (GENERATETYPE == 3) {
-    int tempRand;
-    int src, dest;
-    int x;
-    int y;
-
-    while (1) {
-      tempRand = abs(rand()) % (k * k);
-      x = (*hypercube)[tempRand]->x;
-      y = (*hypercube)[tempRand]->y;
-
-      if (x != y) break;
-    }
-    dest = y + x * k;
-    src = tempRand;
-
-    return new Message(src, dest);
-  }
-  if (GENERATETYPE == 4) {
-    int tempRand;
-    int src, dest;
-    tempRand = abs(rand()) % 10;
-    if (tempRand != 0) {
-      tempRand = abs(rand()) % (k * k);
-      src = tempRand;
-      while (1) {
-        tempRand = abs(rand()) % (k * k);
-        if (tempRand != src) {
-          dest = tempRand;
-          break;
-        }
-      }
-    } else {
-      int temprand2 = abs(rand()) % 2;
-      switch (temprand2) {
-        case 0:
-          dest = (int)((k - 1 - k / 4) * k + k - 1 - k / 4);
-          break;
-        case 1:
-          dest = (int)(k / 4 * k + k / 4);
-          break;
-      }
-      while (1) {
-        tempRand = abs(rand()) % (k * k);
-        if (tempRand != dest) {
-          src = tempRand;
-          break;
-        }
-      }
-    }
-
-    return new Message(src, dest);
   }
 }
 
@@ -118,8 +37,6 @@ void Event::forwardMes(Message& s) {
       next = rout->forward(s);
       if (next->node == -1) {
         s.timeout++;
-        //						if(s.timeout == TIMEOUT)
-        //consumeMes(s);
       } else {
         s.timeout = 0;
         assert(s.routpath[0].node != next->node);
@@ -155,7 +72,6 @@ void Event::forwardMes(Message& s) {
             temp2.buff->bufferPlus(temp2.channel, MESSLENGTH);
         }
         s.timeout++;
-        //	if(s.timeout == TIMEOUT) consumeMes(s);
       } else {
         s.timeout = 0;
         NodeInfo temp1, temp2;  // all the flits forward one step
@@ -212,5 +128,4 @@ void Event::forwardMes(Message& s) {
         temp2.buff->bufferPlus(temp2.channel, MESSLENGTH);
     }
   }
-  // cout << s.src << "dst: " << s.dst << endl ;
 }

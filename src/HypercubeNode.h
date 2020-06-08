@@ -42,10 +42,9 @@ class NodeInfo {
 };
 
 class HypercubeNode {
- private:
+ public:
   int nodeid;
 
- public:
   vector<Buffer*> buffers;
   vector<int> links;
   vector<Buffer*> bufferLinks;

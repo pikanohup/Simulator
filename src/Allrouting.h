@@ -10,9 +10,11 @@ class NodeInfo;
 
 class Allrouting {
  public:
+  int degree;
+
   NodeInfo* next;
   Hypercube* hypercube;
-  int k;
+
   virtual NodeInfo* forward(Message& s) { return NULL; };
   // implemented by child
 };

@@ -10,9 +10,9 @@ class Buffer;
 
 class Routing : public Allrouting {
  public:
-  Routing(Hypercube* hypercube1) {
-    hypercube = hypercube1;
-    k = hypercube1->getNode();
+  Routing(Hypercube* _hypercube) {
+    hypercube = _hypercube;
+    degree = _hypercube->getDegree();
     next = new NodeInfo();
   }
 

@@ -9,7 +9,6 @@
 #include "Event.h"
 
 void outtotest(vector<Message*>* vecmess, Hypercube* hcube);
-void bufferleft(Hypercube* hcube, int knode);
 void drain(vector<Message*>* vecmess, Hypercube* hcube, Event* s);
 
 #endif
