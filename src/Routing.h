@@ -21,8 +21,6 @@ class Routing : public Allrouting {
   NodeInfo* forward(Message&);
   NodeInfo* forward(HypercubeNode* cur, HypercubeNode* dst);
   NodeInfo* noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst);  // from cur to do not need wraplink.
-
-  int prefer(Buffer* buff1, Buffer* buff2, int& chn1, int& chn2, Buffer*& buff);
 };
 
 #endif

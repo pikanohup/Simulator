@@ -45,32 +45,45 @@ bool Routing::checkBuffer(Buffer* buff1, int& chn, Buffer*& record) {
   return k;
 }
 
-int Routing::prefer(Buffer* buff1, Buffer* buff2, int& chn1, int& chn2,
-                    Buffer*& record) {
-  //检查是否有足够的缓存，链路是否可用
-  if (buff1 != NULL && buff2 == NULL)
-    if (checkBuffer(buff1, chn1, record))
-      return 1;
-    else
-      return 0;
-
-  if (buff1 != NULL && buff2 != NULL)
-    if (checkBuffer(buff1, chn1, record))
-      return 1;
-    else
-      return 0;
-
-  if (buff1 == NULL && buff2 != NULL)
-    if (checkBuffer(buff2, chn2, record))
-      return 2;
-    else
-      return 0;
-
-  if (buff1 == NULL && buff2 == NULL) return 0;
-}
-
+// Algorithm: Minimal P-Cube Routing for Hypercubes
 NodeInfo* Routing::noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst) {
   assert(cur && dst && (cur != dst));
-  // TODO
+
+  int vch = R1;
+  int curid = cur->nodeid;
+  int dstid = dst->nodeid;
+
+  // IF digit(Current, i) = 0 and digit(Dest, i) = 1 THEN
+  // E0 := E0 + {i}
+  // IF E0 != {} THEN
+  // Channel := Select(E0)
+  for (int i = 0; i < degree; i++) {
+    if((curid & 0x01 << i) == 0 && (dstid & 0x01 << i) == 1) {
+      int linkid = cur->links[i];
+      Buffer* linkbuffer = cur->bufferLinks[i];
+      if (checkBuffer(linkbuffer, vch, next->buff)) {
+        next->node = linkid;
+        next->channel = vch;
+        return next;
+      }
+    }
+  }
+
+  // IF digit(Current, i) = 1 and digit(Dest, i) = 0 THEN
+  // E1 := E1 + {i}
+  // IF E0 = {} and E1 != {} THEN
+  // Channel := Select(E1)
+  for (int i = 0; i < degree; i++) {
+    if((curid & 0x01 << i) == 1 && (dstid & 0x01 << i) == 0) {
+      int linkid = cur->links[i];
+      Buffer* linkbuffer = cur->bufferLinks[i];
+      if (checkBuffer(linkbuffer, vch, next->buff)) {
+        next->node = linkid;
+        next->channel = vch;
+        return next;
+      }
+    }
+  }
+
   return next;
 }

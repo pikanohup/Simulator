@@ -55,7 +55,7 @@ void HypercubeNode::setLinks(int d) {
   bufferLinks.reserve(d);
 
   for (int i = 0; i < d; i++) {
-    int neighbour = nodeid ^ (1 << i);
+    int neighbour = nodeid ^ (0x01 << i);
     links.push_back(neighbour);
     bufferLinks.push_back(((*hypercube)[neighbour]->buffers)[i]);
   }

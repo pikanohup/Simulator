@@ -1,10 +1,12 @@
+#include <cmath>
+
 #include "common.h"
 
 int ALGORITHM;  //实现多个路由算法的时候执行的是哪一个，该程序只实现了一个，用于Routing.cpp中
 int GENERATETYPE;  //用于选择linkrate的增长方式
 int flowalg;
 int totalcircle;  //程序总的运行周期
-int knode;        //二维网络中每维的节点数
+int knode;        //维数
 
 int getsize(vector<Message*>* mess);
 
@@ -15,7 +17,7 @@ int main() {
     GENERATETYPE = allgen;
     flowalg = 1;
     totalcircle = 100000;
-    knode = 4;
+    knode = 2;
     Hypercube* hcube = NULL;
     Event* s = NULL;
     int r1, r2;
@@ -69,13 +71,13 @@ int main() {
         s = new Event(rout1);
 
         float msgpercir =
-            (float)(linkrate * 2 * 2 * knode /
+            (float)(linkrate * 2 * 2 * pow(2, knode-1) /
                     (MESSLENGTH *
                      10));  //每个周期每个节点产生的message数，还要除以10是因为allvecmess有10个元素
-        // saturationRate = (double)(knode * 2 * 2) / (double)(knode * knode);
-        // 在mesh网络中的饱和吞吐量 msgpercir = linkrate * saturationRate *
-        // knode
-        // * knode; 每个周期每个节点产生的flit数 pika
+        // hypercube:
+        // saturationRate = 2 * b * Bc / N
+        //                = (double) (2 * 2 * pow(2, knode-1)) / (double)pow(2, knode);
+        // msgpercir = linkrate * saturationRate * pow(2, knode)
 
         vector<Message*> allvecmess[10];
         float k = 0;
