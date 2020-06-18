@@ -2,8 +2,6 @@
 
 #include "Routing.h"
 
-// extern int ALGORITHM;
-
 NodeInfo* Routing::forward(Message& s) {
   return forward((*hypercube)[s.routpath[0].node], (*hypercube)[s.dst]);
 }
@@ -14,17 +12,8 @@ NodeInfo* Routing::forward(HypercubeNode* cur, HypercubeNode* dst) {
   next->node = -1;
   next->buff = NULL;
 
-  return noWrapLinkRoute(cur, dst);
+  return minimalPCubeRoute(cur, dst);
 }
-
-/**********
-
-                 check whether buff1 has enough buffer,
-                 n	is the buffer number , if buff1 used, then record it:
-                 chn is R1 or R2 used,and record is the buffer(such as
-   bufferxneg)
-
-                 ***********/
 
 bool Routing::checkBuffer(Buffer* buff1, int& chn, Buffer*& record) {
   bool k = false;
@@ -46,7 +35,7 @@ bool Routing::checkBuffer(Buffer* buff1, int& chn, Buffer*& record) {
 }
 
 // Algorithm: Minimal P-Cube Routing for Hypercubes
-NodeInfo* Routing::noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst) {
+NodeInfo* Routing::minimalPCubeRoute(HypercubeNode* cur, HypercubeNode* dst) {
   assert(cur && dst && (cur != dst));
 
   int vch = R1;
@@ -58,7 +47,9 @@ NodeInfo* Routing::noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst) {
   // IF E0 != {} THEN
   // Channel := Select(E0)
   for (int i = 0; i < degree; i++) {
-    if((curid & 0x01 << i) == 0 && (dstid & 0x01 << i) == 1) {
+    int curdigit = (curid & (0x01 << i)) >> i;
+    int dstdigit = (dstid & (0x01 << i)) >> i;
+    if(curdigit == 0 && dstdigit == 1) {
       int linkid = cur->links[i];
       Buffer* linkbuffer = cur->bufferLinks[i];
       if (checkBuffer(linkbuffer, vch, next->buff)) {
@@ -74,7 +65,9 @@ NodeInfo* Routing::noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst) {
   // IF E0 = {} and E1 != {} THEN
   // Channel := Select(E1)
   for (int i = 0; i < degree; i++) {
-    if((curid & 0x01 << i) == 1 && (dstid & 0x01 << i) == 0) {
+    int curdigit = (curid & (0x01 << i)) >> i;
+    int dstdigit = (dstid & (0x01 << i)) >> i;
+    if(curdigit == 1 && dstdigit == 0) {
       int linkid = cur->links[i];
       Buffer* linkbuffer = cur->bufferLinks[i];
       if (checkBuffer(linkbuffer, vch, next->buff)) {
@@ -82,6 +75,40 @@ NodeInfo* Routing::noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst) {
         next->channel = vch;
         return next;
       }
+    }
+  }
+
+  return next;
+}
+
+// special test case: 2d mesh xy routing
+NodeInfo* Routing::xyRoute(HypercubeNode* cur, HypercubeNode* dst) {
+  assert(cur && dst && (cur != dst));
+
+  int vch = R1;
+  int curid = cur->nodeid;
+  int dstid = dst->nodeid;
+
+  int curx =  (curid & (0x01 << 0)) >> 0;
+  int cury =  (curid & (0x01 << 1)) >> 1;
+  int dstx =  (dstid & (0x01 << 0)) >> 0;
+  int dsty =  (dstid & (0x01 << 1)) >> 1;
+
+  if (curx != dstx) {
+    int linkid = cur->links[0];
+    Buffer* linkbuffer = cur->bufferLinks[0];
+    if (checkBuffer(linkbuffer, vch, next->buff)) {
+      next->node = linkid;
+      next->channel = vch;
+      return next;
+    }
+  } else {
+    int linkid = cur->links[1];
+    Buffer* linkbuffer = cur->bufferLinks[1];
+    if (checkBuffer(linkbuffer, vch, next->buff)) {
+      next->node = linkid;
+      next->channel = vch;
+      return next;
     }
   }
 

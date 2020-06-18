@@ -2,50 +2,28 @@
 
 #include "common.h"
 
-int ALGORITHM;  //实现多个路由算法的时候执行的是哪一个，该程序只实现了一个，用于Routing.cpp中
 int GENERATETYPE;  //用于选择linkrate的增长方式
-int flowalg;
 int totalcircle;  //程序总的运行周期
 int knode;        //维数
 
 int getsize(vector<Message*>* mess);
 
 int main() {
-  for (int allgen = 1; allgen < 2; allgen++) {
+  for (int knode = 2; knode <= 8; knode++) {
     int threshold = 800;
-    Allrouting* rout1 = NULL;
-    GENERATETYPE = allgen;
-    flowalg = 1;
+    Allrouting* rout = NULL;
     totalcircle = 100000;
-    knode = 2;
     Hypercube* hcube = NULL;
     Event* s = NULL;
     int r1, r2;
-    string gen[5] = {"0", "1", "2", "3", "4"};
-    string filename[5] = {
-        "data//gene4//Bubble Flow", "data//gene4//clue-WF",
-        "data//gene4//clue-DOR",    "data//gene4//FCclue-DOR",
-        "data//gene4//FCclue-WF",
-    };  //结果的输出文件路径，因为以前实现了5种路由算法，所以这里有5个文件路径
 
-    for (int lop = 0; lop < 5; lop++) {
-      ;
-      filename[lop].replace(10, 1, gen[GENERATETYPE]);
-    }
-
-    int r1buffer[5] = {1, 2, 1, 2,
-                       2};  //虚拟信道1缓存大小，以message个数为基本单位
-    int r2buffer[5] = {2, 1, 0, 1,
-                       1};  //虚拟信道2缓存大小，若无虚拟通道不使用r2
-    int alg[5] = {0, 1, 2, 1, 2};
-
-    /***
-    round = 2 : Dimension Order
-    Routing，该程序只实现了xy路由，所以round的值不改变，只为2，循环只在实现多种路由算法时才有意义***/
+    int r1buffer[5] = {1, 2, 1, 2, 2};  //虚拟信道1缓存大小，以message个数为基本单位
+    int r2buffer[5] = {2, 1, 0, 1, 1};  //虚拟信道2缓存大小，若无虚拟通道不使用r2
 
     for (int round = 2; round < 3; round++) {
-      // ofstream out = ofstream(filename[round].c_str());
-      ofstream out = ofstream("result.txt");
+      char filename[16]; 
+      sprintf(filename, "result_%d.txt", knode);
+      ofstream out = ofstream(filename);
       float linkrate = 0;
       double max = 0;
 
@@ -54,21 +32,15 @@ int main() {
                                               start simulate
 
 ***********************************************************************************/
+      cout << "---------- " << knode <<  "d hypercube ----------" << endl;
       // linkrate控制消息产生速率
       for (linkrate = 0.01; linkrate < 1;) {
         r1 = r1buffer[round] * MESSLENGTH;  //以flit个数为基本单位
         r2 = r2buffer[round] * MESSLENGTH;
         hcube = new Hypercube(knode, r1, r2);  //初始化网络结构
 
-        switch (round) {
-          case 1:
-          case 2:
-            ALGORITHM = alg[round];
-            rout1 = new Routing(hcube);
-            break;
-        }
-
-        s = new Event(rout1);
+        rout = new Routing(hcube);
+        s = new Event(rout);
 
         float msgpercir =
             (float)(linkrate * 2 * 2 * pow(2, knode-1) /
@@ -90,8 +62,7 @@ int main() {
   ***********************************************************************************/
         //执行totalcircle个周期，getsize(allvecmess) <
         // threshold只是自己加的限制条件，可以有也可以删除，具体的threshold和totalcircle值也可以在前面修改
-        for (int i = 0; i < totalcircle && getsize(allvecmess) < threshold;
-             i++) {
+        for (int i = 0; i < totalcircle && getsize(allvecmess) < threshold; i++) {
           vector<Message*>& vecmess = allvecmess[i % 10];
           for (k += msgpercir; k > 0; k--) {
             allmess++;  //总的产生消息数加一
@@ -144,9 +115,7 @@ int main() {
 
         // s->totalcir/s->messarrive 平均延迟的计算公式；linkrate * ((float)
         // s->messarrive / allmess)吞吐量的计算公式
-        cout << endl
-             << endl
-             << "linkrate:" << linkrate << "    arrive:  " << s->messarrive
+        cout << "linkrate:" << linkrate << "    arrive:  " << s->messarrive
              << "    in the network : " << size << endl
              << "average latency: " << (s->totalcir / s->messarrive)
              << "  nomalized accepted traffic: "
@@ -158,8 +127,7 @@ int main() {
 
         /************************************************************************************
 
-                                                whether arrive at saturation
-  point
+                                           whether arrive at saturation point
 
   ***********************************************************************************/
         if (linkrate * ((float)s->messarrive / allmess) > max &&
@@ -178,8 +146,8 @@ int main() {
             }
           }
           cout << "in the network:      " << size << endl;
-          outtotest(allvecmess, hcube);
-          cout << "max:" << max << endl;
+          cout << "max:" << max << endl << endl;
+          // outtotest(allvecmess, hcube);
           break;
         }
 
@@ -192,35 +160,14 @@ int main() {
                it != allvecmess[m].end(); it++)
             delete (*it);
         }
-        delete rout1;
+        delete rout;
         delete hcube;
         delete s;
 
-        switch (GENERATETYPE) {
-          case 1:
-            if (linkrate < 0.5)
-              linkrate += 0.05;
-            else
-              linkrate += 0.02;
-            break;
-
-          case 2:
-          case 3:
-            if (linkrate < 0.3)
-              linkrate += 0.1;
-            else
-              linkrate += 0.02;
-            break;
-          case 4:
-            if (linkrate < 0.4)
-              linkrate += 0.1;
-            else
-              linkrate += 0.02;
-            break;
-        }
-
+        if (linkrate < 0.5) linkrate += 0.05;
+        else linkrate += 0.02;
       }  // each linkrate end
     }    // round end
   }
-  return 1;
+  return 0;
 }

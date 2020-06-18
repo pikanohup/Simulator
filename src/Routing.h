@@ -20,7 +20,8 @@ class Routing : public Allrouting {
 
   NodeInfo* forward(Message&);
   NodeInfo* forward(HypercubeNode* cur, HypercubeNode* dst);
-  NodeInfo* noWrapLinkRoute(HypercubeNode* cur, HypercubeNode* dst);  // from cur to do not need wraplink.
+  NodeInfo* minimalPCubeRoute(HypercubeNode* cur, HypercubeNode* dst);
+  NodeInfo* xyRoute(HypercubeNode* cur, HypercubeNode* dst);
 };
 
 #endif

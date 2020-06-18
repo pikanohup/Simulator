@@ -18,7 +18,7 @@ void outtotest(vector<Message*>* allvecmess, Hypercube* hcube) {
           << " dst: ( " << (*hcube)[(*it)->dst]->nodeid << ") "
           << " head:( " << (*hcube)[(*it)->routpath[0].node]->nodeid << ", R"
           << (*it)->routpath[0].channel << ")  "
-          << " tail:( " << (*hcube)[(*it)->routpath[19].node]->nodeid << ") " << endl;
+          << " tail:( " << (*hcube)[(*it)->routpath[15].node]->nodeid << ") " << endl;
     }
   }
 }

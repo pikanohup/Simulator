@@ -3,8 +3,6 @@
 #include "Event.h"
 #include "Message.h"
 
-// extern int GENERATETYPE;
-
 Event::Event(Allrouting* rout) : consumed(0), totalcir(0), messarrive(0), rout(rout), hcube(rout->hypercube) {
 }
 
